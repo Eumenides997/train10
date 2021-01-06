@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'dva';
-import styles from './IndexPage.css';
 import App from '../components/App'
 import 'antd/dist/antd.css'
 
-function IndexPage() {
+function IndexPage(props) {
   return (
-    <App />
+    <div>
+      <App  {...props} />
+    </div>
   );
 }
 

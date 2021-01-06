@@ -1,0 +1,49 @@
+{
+  "products": [{
+      "img": "./src/assets/yay.jpg",
+      "name": "2020秋季新款上衣",
+      "type": [{
+        "name": "衣服"
+      }],
+      "label": [{
+        "name": "热卖"
+      }],
+      "sku": "WEE989REW",
+      "saleState": "已下架",
+      "price": "168.00",
+      "costPrice": "288.00"
+    },
+    {
+      "img": "./src/assets/yay.jpg",
+      "name": "2020秋季新款套装",
+      "type": [{
+          "name": "套装"
+        },
+        {
+          "name": "套装"
+        }
+      ],
+      "label": [{
+        "name": "热卖"
+      }],
+      "sku": "WEE989REW",
+      "saleState": "已上架",
+      "price": "168.00",
+      "costPrice": "288.00"
+    },
+    {
+      "img": "./src/assets/yay.jpg",
+      "name": "2020秋季新款鞋子",
+      "type": [{
+        "name": "鞋子"
+      }],
+      "label": [{
+        "name": "热卖"
+      }],
+      "sku": "WEE989REW",
+      "saleState": "已上架",
+      "price": "168.00",
+      "costPrice": "288.00"
+    }
+  ]
+}
