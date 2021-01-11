@@ -14,11 +14,11 @@ const { SubMenu } = Menu;
 
 class App extends React.Component {
     state = {
-        collapsed: false,
+        collapsed: true,
     };
 
     onCollapse = collapsed => {
-        // console.log(collapsed);
+        console.log(collapsed);
         this.setState({ collapsed });
     };
 

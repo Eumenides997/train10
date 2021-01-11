@@ -5,7 +5,8 @@ import { connect } from 'dva'
 import { Link } from 'dva/router';
 
 @connect(({ products }) => ({
-    productsData: products.productsData
+    productsData: products.productsData,
+    deleteFlag: products.deleteFlag
 }))
 
 class Products extends React.Component {
@@ -14,7 +15,11 @@ class Products extends React.Component {
         this.state = {
             columnsKey: 0,
             data: [],//选中商品
-            dataSource: []
+            dataSource: [],
+            status: '',
+            tag: '',
+            category: '',
+            search: ''
         }
     }
     async componentWillMount() {
@@ -32,20 +37,47 @@ class Products extends React.Component {
         })
     }
     render() {
-        const DeleteProducts = async (products) => {
+        const DeleteProducts = (products) => {
             const { dispatch } = this.props
-            await products.map(item => {
+            products.map(item => {
                 console.log(item)
                 dispatch({
                     type: "products/DeleteProducts",
                     data: item
                 })
             })
-            this.dataSource.map(item => {
-                console.log(item.check)
-            })
             this.setState({
                 columnsKey: 0
+            })
+        }
+        const UpdataProducts = (products, poststate) => {
+            const { dispatch } = this.props
+            console.log(products, poststate)
+            products.map(item => {
+                dispatch({
+                    type: "products/UpdataProducts",
+                    data: { item, poststate }
+                })
+            })
+        }
+        const screenProducts = (type, it) => {
+            const { dispatch } = this.props
+            if (type === "category") {
+                this.state.category = it
+            } else if (type === "tag") {
+                this.state.tag = it
+            } else if (type === "status") {
+                this.state.status = it
+            } else {
+                this.state.search = it
+            }
+            const path = "filter[category]=" + this.state.category
+                + "&" + "filter[tag]=" + this.state.tag
+                + "&" + "filter[status]=" + this.state.status
+                + "&" + "filter[search]=" + this.state.search
+            dispatch({
+                type: "products/ScreenProducts",
+                data: path
             })
         }
         // console.log("商品列表")
@@ -63,6 +95,7 @@ class Products extends React.Component {
         }
         console.log('选中商品:', this.state.data)
         const onChange = e => {
+            // console.log(e)
             e.target.data.checked = e.target.checked
             if (e.target.checked) {
                 this.setState({
@@ -74,10 +107,24 @@ class Products extends React.Component {
                 })
             }
         }
-        const checkAll = () => {
-            this.setState({
-                columnsKey: length
-            })
+        const checkAll = e => {
+            if (e.target.checked) {
+                (this.dataSource || []).map(item => {
+                    item.check.props.data.checked = true
+                })
+                this.setState({
+                    columnsKey: this.dataSource.length
+                })
+            } else {
+                (this.dataSource || []).map(item => {
+                    item.check.props.data.checked = false
+                })
+                this.setState({
+                    columnsKey: 0
+                })
+            }
+            // console.log(e.target.checked)
+            // console.log(this.state.columnsKey)
         }
         let elements = ''
         this.dataSource = (productsData || []).map((item, key) => (
@@ -89,11 +136,12 @@ class Products extends React.Component {
                 key: key,
                 check: <Checkbox onChange={onChange}
                     data={item}
+                    checked={item.checked}
                 />,
                 img: <Image src={item.image} width={50} />,
                 name: item.title,
                 type: elements,
-                saleState: item.post_status,
+                saleState: item.post_status === "publish" ? "上架" : "下架",
                 operation: <Link to="/ProductsEdit" onClick={() => this.setProduct(item)}>编辑</Link>
             }
         ))
@@ -131,14 +179,14 @@ class Products extends React.Component {
         ];
         const columns2 = [
             {
-                title: <Checkbox onChange={checkAll} ref={(ref) => { this.myCheck = ref }} />,
+                title: <Checkbox onChange={checkAll} ref="myCheck" />,
                 dataIndex: 'check',
                 key: 'check',
             },
             {
                 title: <div>
-                    <a style={{ marginRight: "20px" }} onClick={() => alert('上架')}>上架</a>
-                    <a style={{ marginRight: "20px" }} onClick={() => alert('下架')}>下架</a>
+                    <a style={{ marginRight: "20px" }} onClick={() => UpdataProducts(this.state.data, 'publish')}>上架</a>
+                    <a style={{ marginRight: "20px" }} onClick={() => UpdataProducts(this.state.data, 'private')}>下架</a>
                     <a style={{ marginRight: "20px" }} onClick={() => DeleteProducts(this.state.data)}>删除</a>
                 </div>,
                 dataIndex: 'img',
@@ -169,9 +217,9 @@ class Products extends React.Component {
         const label = ['全部标签', '标签', '标签2', '标签3', '标签n'];
         const saleState = ['全部分类', '已上架', '已下架'];
         const onSearch = () => {
-            // alert(this.myInput.input.value);
-            console.log(this.myInput)
-            console.log(this.myCheck.input.checked)
+            const value = this.refs.search.state.value
+            console.log(this.refs.search)
+            screenProducts("search", value === undefined ? "" : value)
         }
         return (
             <div style={{ marginTop: '10px' }}>
@@ -183,20 +231,19 @@ class Products extends React.Component {
                     <Col span={4}>
                         <Select placeholder="全部分类">
                             {type.map(it => (
-                                <Select.Option key={it} value={it}>
-                                    {it}
+                                <Select.Option key={it} value={it} >
+                                    <span onClick={() => screenProducts("category", it === "全部分类" ? "" : it)}>{it}</span>
                                 </Select.Option>
                             ))}
                         </Select>
                     </Col>
                     <Col span={4}>
                         <Select
-                            className='Select'
                             placeholder="全部标签"
                         >
                             {label.map(it => (
                                 <Select.Option key={it} value={it}>
-                                    {it}
+                                    <span onClick={() => screenProducts("tag", it === "全部标签" ? "" : it)}>{it}</span>
                                 </Select.Option>
                             ))}
                         </Select>
@@ -207,19 +254,19 @@ class Products extends React.Component {
                         >
                             {saleState.map(it => (
                                 <Select.Option key={it} value={it}>
-                                    {it}
+                                    <span onClick={() => screenProducts("status", it === "已上架" ? "publish" : it === "已下架" ? "private" : "")}>{it}</span>
                                 </Select.Option>
                             ))}
                         </Select>
                     </Col>
                     <Col span={8}>
-                        <Input placeholder="请输入商品名或SKU" ref={(ref) => { this.myInput = ref }} />
+                        <Input placeholder="请输入商品名或SKU" ref="search" />
                     </Col>
                     <Col span={1}>
                         <Button type="primary" shape="circle" icon={<SearchOutlined onClick={onSearch} />} />
                     </Col>
                     <Col span={1}>
-                        <Button type="primary" shape="circle" icon={<UndoOutlined />} />
+                        <Button type="primary" shape="circle" icon={<UndoOutlined />} onClick={() => { this.refs.search.state.value = "" }} />
                     </Col>
                 </Row>
                 {

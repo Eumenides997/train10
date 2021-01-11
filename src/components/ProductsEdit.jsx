@@ -68,17 +68,17 @@ class ProductsEdit extends React.Component {
         var product = {
             "title": data.title,
             "content": "facere",
-            "post_status": data.post_status === "上架" ? "publish" : "publish",
+            "post_status": data.post_status === "上架" ? "publish" : "private",
             "regular_price": data.regular_price || 0,
             "price": data.regular_price || 0,
-            "sku": data.sku || "111",
+            "sku": data.sku,
             "weight": 20,
             "weight_unit": "g",
             "manage_stock": "yes",
             "stock": 50,
             "backorders": "no",
             "tags": [],
-            "categories": [],
+            "categories": data.categories || [],
             "gallery": [],
             "attrs": [],
             "variants": [],
@@ -129,7 +129,7 @@ class ProductsEdit extends React.Component {
                     <Form.Item name="price" label="原价:">
                         <Input />
                     </Form.Item>
-                    <Form.Item name="sku" label="SKU:" >
+                    <Form.Item name="sku" label="SKU:" rules={[{ required: true, message: '不能为空' }]}>
                         <Input />
                     </Form.Item>
                     <Form.Item label="商品分类:">
