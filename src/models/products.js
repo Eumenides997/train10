@@ -9,7 +9,7 @@ export default {
     effects: {
         *GetData({ data }, { put, call }) {
             const res = yield call(ProductsData.getProducts)
-            // console.log("res:", res)
+            console.log("res:", res)
             yield put({
                 type: 'setProductsData',
                 data: res.data.data
@@ -35,17 +35,37 @@ export default {
         *CreateProduct({ data }, { call }) {
             const res = data
             console.log("res:", res)
-            yield call(ProductsData.createProduct, res)
+            const result = yield call(ProductsData.createProduct, res)
+            console.log(result)
         },
         *DeleteProducts({ data }, { call, put }) {
             const res = data
             console.log("res:", res)
-            // const result = yield call(ProductsData.deleteProduct, res.ID)
-            // console.log(result)
-
+            const result = yield call(ProductsData.deleteProduct, res.ID)
+            console.log(result)
             yield put({
                 type: 'deleteProducts',
                 data: res
+            })
+        },
+        *UpdataProducts({ data }, { call, put }) {
+            const res = data
+            console.log("res:", res)
+            const result = yield call(ProductsData.updataProducts, res.item, res.poststate)
+            console.log(result)
+            yield put({
+                type: 'updataProducts',
+                data: res
+            })
+        },
+        *ScreenProducts(data, { put, call }) {
+            const res = data.data
+            console.log("res:", res)
+            const res2 = yield call(ProductsData.screenProducts, res)
+            console.log("res2:", res2)
+            yield put({
+                type: 'setProductsData',
+                data: res2.data.data
             })
         }
     },
@@ -54,7 +74,8 @@ export default {
             // console.log(payload.data)
             return {
                 ...state,
-                productsData: JSON.parse(JSON.stringify(payload.data))
+                productsData: JSON.parse(JSON.stringify(payload.data)),
+                productsData2: JSON.parse(JSON.stringify(payload.data))
             }
         },
         setProductData(state, payload) {
@@ -85,7 +106,23 @@ export default {
             // console.log('products:', products)
             return {
                 ...state,
-                productsData: products
+                productsData: JSON.parse(JSON.stringify(products))
+            }
+        },
+        updataProducts(state, payload) {
+            const res = payload.data
+            // console.log("updataProducts:", res)
+            const { productsData } = state
+            // console.log('productsData:', productsData)
+            productsData.map(item => {
+                if (item.ID === res.item.ID) {
+                    item.post_status = res.poststate
+                }
+            })
+            // console.log('productsData:', productsData)
+            return {
+                ...state,
+                productsData: JSON.parse(JSON.stringify(productsData))
             }
         }
     }
