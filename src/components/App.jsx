@@ -14,7 +14,7 @@ const { SubMenu } = Menu;
 
 class App extends React.Component {
     state = {
-        collapsed: true,
+        collapsed: false,
     };
 
     onCollapse = collapsed => {
@@ -42,7 +42,7 @@ class App extends React.Component {
                             <Menu.Item key="4"><Link to="/ProductCategories"><p>分类列表</p></Link></Menu.Item>
                         </SubMenu>
                         <Menu.Item key="5" icon={<UserOutlined />}>
-                            <a>顾客</a>
+                            <Link to="/Customers"><p style={{color:'white'}}>顾客</p></Link>
                         </Menu.Item>
                         <Menu.Item key="6" icon={<SettingOutlined />}>
                             <a>设置</a>

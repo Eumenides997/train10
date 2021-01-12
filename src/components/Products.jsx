@@ -4,9 +4,10 @@ import { SearchOutlined, UndoOutlined, FileAddOutlined } from '@ant-design/icons
 import { connect } from 'dva'
 import { Link } from 'dva/router';
 
-@connect(({ products }) => ({
+@connect(({ products, productCategories, productTags }) => ({
     productsData: products.productsData,
-    deleteFlag: products.deleteFlag
+    CategoriesData: productCategories.CategoriesData,
+    tagsData: productTags.tagsData
 }))
 
 class Products extends React.Component {
@@ -26,6 +27,12 @@ class Products extends React.Component {
         const { dispatch } = this.props
         await dispatch({
             type: 'products/GetData'
+        })
+        await dispatch({
+            type: 'productCategories/GetData'
+        })
+        await dispatch({
+            type: 'productTags/GetData'
         })
     }
     setProduct = async (data) => {
@@ -81,14 +88,12 @@ class Products extends React.Component {
             })
         }
         // console.log("商品列表")
-        const { productsData } = this.props
+        const { productsData, CategoriesData, tagsData } = this.props
         console.log('productsData:', productsData)
         this.state.data = []
-        let length = 0
         {
-            (productsData || []).map((item, key) => {
+            (productsData || []).map(item => {
                 if (item.checked) {
-                    length++
                     this.state.data.push(item)
                 }
             })
@@ -213,8 +218,15 @@ class Products extends React.Component {
                 key: 'operation',
             }
         ];
-        const type = ['全部分类', '衣服', '裤子', '鞋子'];
-        const label = ['全部标签', '标签', '标签2', '标签3', '标签n'];
+        const type = ['全部分类'];
+        (CategoriesData || []).map(item => {
+            // console.log("CategoriesData:", item)
+            type.push(item.name)
+        })
+        const label = ['全部标签'];
+        (tagsData || []).map(item => {
+            label.push(item.name)
+        })
         const saleState = ['全部分类', '已上架', '已下架'];
         const onSearch = () => {
             const value = this.refs.search.state.value
