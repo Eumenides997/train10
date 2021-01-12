@@ -5,6 +5,7 @@ import Products from './components/Products'
 import ProductsEdit from './components/ProductsEdit'
 import ProductCategories from './components/ProductCategories'
 import Customers from './components/Customers'
+import CustomerDetails from './components/CustomerDetails'
 
 function RouterConfig({ history }) {
   return (
@@ -16,6 +17,7 @@ function RouterConfig({ history }) {
           <Route path="/ProductsEdit" exact component={ProductsEdit} />
           <Route path="/ProductCategories" exact component={ProductCategories} />
           <Route path="/Customers" exact component={Customers} />
+          <Route path="/CustomerDetails" exact component={CustomerDetails} />
         </IndexPage>
       </Switch>
     </Router>

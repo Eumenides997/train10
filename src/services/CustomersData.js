@@ -14,4 +14,9 @@ export default {
         url: ht + '/api/admin/customers?page_size=25&' + data,
         headers: { 'authorization': token }
     }),
+    getOrders: (data) => axios({
+        method: 'GET',
+        url: ht + '/api/admin/customers/' + data + "/orders",
+        headers: { 'authorization': token }
+    }),
 }

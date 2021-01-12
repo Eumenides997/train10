@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, DatePicker, Space, Input, Select, Row, Col, Button, Checkbox } from 'antd';
-import { SearchOutlined, UndoOutlined, FileAddOutlined } from '@ant-design/icons';
+import { SearchOutlined, UndoOutlined } from '@ant-design/icons';
 import { connect } from 'dva'
 import { Link } from 'dva/router';
 
@@ -25,11 +25,11 @@ class Products extends React.Component {
             type: 'customers/GetData'
         })
     }
-    setProduct = async (data) => {
+    setCustomer = async (data) => {
         const { dispatch } = this.props
-        // console.log("data:", data)
+        console.log("data:", data)
         await dispatch({
-            type: 'products/SetProduct',
+            type: 'customers/SetCustomer',
             data: data
         })
     }
@@ -65,6 +65,7 @@ class Products extends React.Component {
                 state: item.subscribed ? "已订阅" : "未订阅",
                 count: item.order_count,
                 amount: item.order_total,
+                operation: <Link to="/CustomerDetails" onClick={() => this.setCustomer(item)}>详情</Link>
             }
         ))
         const columns1 = [
@@ -92,6 +93,11 @@ class Products extends React.Component {
                 title: '订单总金额',
                 dataIndex: 'amount',
                 key: 'amount',
+            },
+            {
+                title: '操作',
+                dataIndex: 'operation',
+                key: 'operation',
             }
         ];
         const type = ['全部订阅状态', '已订阅', '未订阅'];
