@@ -8,14 +8,12 @@ export default {
         method: 'GET',
         url: ht + '/api/admin/products?page_size=25',
         headers: { 'authorization': token }
-    },
-    ),
+    }),
     screenProducts: (data) => axios({
         method: 'GET',
         url: ht + '/api/admin/products?' + data,
         headers: { 'authorization': token }
-    },
-    ),
+    }),
     createProduct: (product) => axios({
         method: 'POST',
         url: ht + '/api/admin/products',
@@ -27,29 +25,28 @@ export default {
         url: ht + '/api/admin/products/' + id,
         headers: { 'authorization': token }
     }),
-    updataProducts: (product, poststate) => axios(
-        {
-            method: "PUT",
-            url: ht + '/api/admin/products/' + product.ID,
-            headers: { 'authorization': token },
-            data: {
-                "title": product.title,
-                "content": "totam",
-                "post_status": poststate,
-                "regular_price": product.regular_price === null ? 0 : product.regular_price,
-                "price": product.price === null ? 0 : product.price,
-                "sku": product.sku === null ? "123" : product.sku,
-                "weight": product.weight === null ? 20 : product.weight,
-                "weight_unit": product.weight_unit === null ? "g" : product.weight_unit,
-                "manage_stock": product.manage_stock === null ? "yes" : product.manage_stock,
-                "stock": product.stock === null ? 0 : product.stock,
-                "backorders": product.backorders === null ? "yes" : product.backorders,
-                "tags": product.tags === null ? [] : product.tags,
-                "categories": product.categories === null ? [] : product.categories,
-                "gallery": product.gallery === null ? [] : product.gallery,
-                "attrs": product.attrs === null ? [] : product.attrs,
-                "variants": product.variants === null ? [] : product.variants,
-                "slug": product.slug === null ? "123" : product.slug
-            }
-        })
+    updataProducts: (product, poststate) => axios({
+        method: "PUT",
+        url: ht + '/api/admin/products/' + product.ID,
+        headers: { 'authorization': token },
+        data: {
+            "title": product.title,
+            "content": "totam",
+            "post_status": poststate,
+            "regular_price": product.regular_price === null ? 0 : product.regular_price,
+            "price": product.price === null ? 0 : product.price,
+            "sku": product.sku === null ? "123" : product.sku,
+            "weight": product.weight === null ? 20 : product.weight,
+            "weight_unit": product.weight_unit === null ? "g" : product.weight_unit,
+            "manage_stock": product.manage_stock === null ? "yes" : product.manage_stock,
+            "stock": product.stock === null ? 0 : product.stock,
+            "backorders": product.backorders === null ? "yes" : product.backorders,
+            "tags": product.tags === null ? [] : product.tags,
+            "categories": product.categories === null ? [] : product.categories,
+            "gallery": product.gallery === null ? [] : product.gallery,
+            "attrs": product.attrs === null ? [] : product.attrs,
+            "variants": product.variants === null ? [] : product.variants,
+            "slug": product.slug === null ? "123" : product.slug
+        }
+    })
 }
