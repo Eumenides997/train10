@@ -39,7 +39,7 @@ class App extends React.Component {
                         </Menu.Item>
                         <SubMenu key="sub1" icon={<HddOutlined />} title="商品">
                             <Menu.Item key="3"><Link to="/Products"><p>商品列表</p></Link></Menu.Item>
-                            <Menu.Item key="4"><p>分类列表</p></Menu.Item>
+                            <Menu.Item key="4"><Link to="/ProductsTags"><p>分类列表</p></Link></Menu.Item>
                         </SubMenu>
                         <Menu.Item key="5" icon={<UserOutlined />}>
                             <a>顾客</a>
